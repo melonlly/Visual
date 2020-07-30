@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test1</title>
+    <style>
+        #canvas {
+            /* width: 512px;
+        height: 512px; */
+            border: 0.5px dotted #cccccc;
+        }
+    </style>
+</head>
+<body>
+    
+    <canvas id="canvas" width="512" height="512"></canvas>
+
+    <script>
+        const TAU = 2 * Math.PI;
+
+        const canvas = document.getElementById("canvas")
+        const ctx = canvas.getContext('2d')
+
+        ctx.fillStyle = "#f73";
+        ctx.beginPath();
+        // 三角形
+        ctx.moveTo(200, 200)
+        ctx.lineTo(150, 250)
+        ctx.lineTo(250, 250)
+        ctx.fill()
+
+        ctx.clearRect(0, 0, 512, 512); // ---->> 清除画板
+
+        // 笑脸
+        ctx.strokeStyle = "#f73";
+        ctx.beginPath();
+        ctx.arc(175, 175, 50, 0, TAU, true); // 绘制
+        ctx.moveTo(210, 175);
+        ctx.arc(175, 175, 35, 0, TAU / 2, false);   // 口(顺时针)
+        ctx.moveTo(165, 165);
+        ctx.arc(160, 165, 5, 0, TAU, true);  // 左眼
+        ctx.moveTo(195, 165);
+        ctx.arc(190, 165, 5, 0, TAU, true);  // 右眼
+        ctx.stroke();
+
+        ctx.clearRect(0, 0, 512, 512); // ---->> 清除画板
+
+        // 椭圆（三次贝塞尔曲线）
+        ctx.beginPath();
+        
+
+    </script>
+
+</body>
+</html>

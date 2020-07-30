@@ -15,7 +15,7 @@
         <script src="https://d3js.org/d3-hierarchy.v1.min.js"></script>
     </head>
     <body>
-        <canvas id="canvas" width="1600" height="1600"></canvas>
+        <canvas id="canvas" width="800" height="800"></canvas>
 
         <script>
             const TAU = 2 * Math.PI;
@@ -38,7 +38,7 @@
                 } else {
                     const name = node.data.name;
                     ctx.fillStyle = textColor;
-                    ctx.font = "1.5rem Arial";
+                    ctx.font = "1rem Arial";
                     ctx.textAlign = "center";
                     ctx.fillText(name, x, y);
                 }
@@ -48,18 +48,20 @@
             if (container) {
                 const context = container.getContext("2d");
 
-                // const rectSize = [100, 100];
-                // context.fillStyle = "red";
-                // context.save(); // 暂存状态
-                // context.translate(-0.5 * rectSize[0], -0.5 * rectSize[1]); // 平移
-                // context.beginPath();
-                // context.rect(
-                //     0.5 * canvas.width,
-                //     0.5 * canvas.height,
-                //     ...rectSize
-                // );
-                // context.fill();
-                // context.restore(); // 恢复状态
+                const rectSize = [100, 100];
+                context.fillStyle = "red";
+                context.save(); // 暂存状态
+                context.translate(-0.5 * rectSize[0], -0.5 * rectSize[1]); // 平移
+                context.beginPath();
+                context.rect(
+                    0.5 * canvas.width,
+                    0.5 * canvas.height,
+                    ...rectSize
+                );
+                context.fill();
+                context.restore(); // 恢复状态
+
+                context.clearRect(0, 0, 800, 800); // ---->> 清除画板
 
                 const dataSource =
                     "https://s5.ssl.qhres.com/static/b0695e2dd30daa64.json";
@@ -73,7 +75,7 @@
                         .sort((a, b) => b.value - a.value);
 
                     // 将数据映射为一组 1600 宽高范围内的圆形，在每个相邻的圆之间我们还保留 3 个像素的 padding
-                    const pack = d3.pack().size([1600, 1600]).padding(3);
+                    const pack = d3.pack().size([800, 800]).padding(3);
 
                     const root = pack(regions);
                     console.log(root);
