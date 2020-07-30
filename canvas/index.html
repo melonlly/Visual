@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>canvas</title>
+        <style>
+            #canvas {
+                /* width: 512px;
+            height: 512px; */
+                border: 0.5px dotted #cccccc;
+            }
+        </style>
+
+        <script src="https://d3js.org/d3-hierarchy.v1.min.js"></script>
+    </head>
+    <body>
+        <canvas id="canvas" width="1600" height="1600"></canvas>
+
+        <script>
+            const TAU = 2 * Math.PI;
+
+            function draw(
+                ctx,
+                node,
+                { fillStyle = "rgba(0, 0, 0, 0.2)", textColor = "white" } = {}
+            ) {
+                const children = node.children;
+                const { x, y, r } = node;
+                ctx.fillStyle = fillStyle;
+                ctx.beginPath();
+                ctx.arc(x, y, r, 0, TAU);
+                ctx.fill();
+                if (children) {
+                    for (let i = 0; i < children.length; i++) {
+                        draw(ctx, children[i]);
+                    }
+                } else {
+                    const name = node.data.name;
+                    ctx.fillStyle = textColor;
+                    ctx.font = "1.5rem Arial";
+                    ctx.textAlign = "center";
+                    ctx.fillText(name, x, y);
+                }
+            }
+
+            const container = document.getElementById("canvas");
+            if (container) {
+                const context = container.getContext("2d");
+
+                // const rectSize = [100, 100];
+                // context.fillStyle = "red";
+                // context.save(); // 暂存状态
+                // context.translate(-0.5 * rectSize[0], -0.5 * rectSize[1]); // 平移
+                // context.beginPath();
+                // context.rect(
+                //     0.5 * canvas.width,
+                //     0.5 * canvas.height,
+                //     ...rectSize
+                // );
+                // context.fill();
+                // context.restore(); // 恢复状态
+
+                const dataSource =
+                    "https://s5.ssl.qhres.com/static/b0695e2dd30daa64.json";
+                (async function () {
+                    const data = await (await fetch(dataSource)).json();
+
+                    // 将省份数据按照包含城市的数量，从多到少排序
+                    const regions = d3
+                        .hierarchy(data)
+                        .sum((d) => 1)
+                        .sort((a, b) => b.value - a.value);
+
+                    // 将数据映射为一组 1600 宽高范围内的圆形，在每个相邻的圆之间我们还保留 3 个像素的 padding
+                    const pack = d3.pack().size([1600, 1600]).padding(3);
+
+                    const root = pack(regions);
+                    console.log(root);
+
+                    // 将数据中的 x、y、r 通过 canvas 绘制出来
+                    draw(context, root);
+                })();
+            }
+        </script>
+    </body>
+</html>
