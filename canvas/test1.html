@@ -48,6 +48,14 @@
 
         // 椭圆（三次贝塞尔曲线）
         ctx.beginPath();
+        ctx.moveTo(100, 200)
+        ctx.bezierCurveTo(100, 140, 250, 140, 250, 200)
+        ctx.bezierCurveTo(250, 260, 100, 260, 100, 200)
+        ctx.stroke();
+
+        ctx.clearRect(0, 0, 512, 512); // ---->> 清除画板
+
+        // 五角星
         
 
     </script>

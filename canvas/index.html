@@ -5,6 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>canvas</title>
         <style>
+            body {
+                padding: 0;
+                margin: 0;
+            }
             #canvas {
                 /* width: 512px;
             height: 512px; */
@@ -12,7 +16,7 @@
             }
         </style>
 
-        <script src="https://d3js.org/d3-hierarchy.v1.min.js"></script>
+        <script src="../common/d3-hierarchy.v1.min.js"></script>
     </head>
     <body>
         <canvas id="canvas" width="800" height="800"></canvas>
@@ -83,6 +87,12 @@
                     // 将数据中的 x、y、r 通过 canvas 绘制出来
                     draw(context, root);
                 })();
+
+                // 设置鼠标监听
+                window.addEventListener("mousemove", ({ clientX, clientY }) => {
+                    const x = clientX
+                    const y = clientY
+                })
             }
         </script>
     </body>
