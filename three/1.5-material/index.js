@@ -7,26 +7,59 @@ var scene = new THREE.Scene();
  * 创建网格模型
  */
 // var geometry = new THREE.SphereGeometry(60, 40, 40); //创建一个球体几何对象
-var geometry = new THREE.BoxGeometry(100, 100, 300); //创建一个立方体几何对象Geometry
-var geometry2 = new THREE.BoxGeometry(100, 300, 100);
-var geometry3 = new THREE.BoxGeometry(300, 100, 100);
+var geometry = new THREE.BoxGeometry(50, 50, 100); //创建一个立方体几何对象Geometry
+
+// 圆柱  参数：圆柱面顶部、底部直径50,50   高度100  圆周分段数
+var cylinder = new THREE.CylinderGeometry(50, 50, 100, 25);
+// 正八面体
+var octahedron = new THREE.OctahedronGeometry(50);
+// 正十二面体
+var dodecahed = new THREE.DodecahedronGeometry(50);
+// 正二十面体
+var icosahedron = new THREE.IcosahedronGeometry(50);
+
 //材质对象Material
 var material = new THREE.MeshLambertMaterial({
     color: 0x0000ff,
+    opacity: 0.5,
+    transparent: true,
 });
-// var color = new THREE.Color("rgb(0, 255, 0, 0.2)");
 var material2 = new THREE.MeshLambertMaterial({
     color: 0x00ff00,
+    // opacity:0.5,
+    // transparent:true
 });
+material2.opacity = 0.5;
+material2.transparent = true;
 var material3 = new THREE.MeshLambertMaterial({
     color: 0xff0000,
+    opacity: 0.5,
+    transparent: true,
 });
-var mesh = new THREE.Mesh(geometry, material); //网格模型对象Mesh
-var mesh2 = new THREE.Mesh(geometry2, material2);
-var mesh3 = new THREE.Mesh(geometry3, material3);
+material3.wireframe = true; // 将几何图形渲染为线框
+// 设置高光材质
+var material4 = new THREE.MeshLambertMaterial({
+    color: 0xffff00,
+    specular: 0x4488ee, // 反光色
+    shininess: 12, // 反光度
+});
+
+var mesh = new THREE.Mesh(icosahedron, material); //网格模型对象Mesh
+var mesh2 = new THREE.Mesh(geometry, material2);
+var mesh3 = new THREE.Mesh(cylinder, material3);
+var mesh4 = new THREE.Mesh(octahedron, material4);
 scene.add(mesh); //网格模型添加到场景中
+mesh2.translateX(300);
+mesh2.translateY(200);
+mesh2.translateZ(100);
 scene.add(mesh2);
+mesh3.position.set(100, 200, 300);
 scene.add(mesh3);
+mesh4.position.set(100, -100, 100);
+scene.add(mesh4);
+
+// 辅助坐标系 AxesHelper
+scene.add(new THREE.AxesHelper(400));
 
 /**
  * 光源设置
@@ -39,8 +72,6 @@ scene.add(point); //点光源添加到场景中
 //环境光
 var ambient = new THREE.AmbientLight(0x444444);
 scene.add(ambient);
-// console.log(scene)
-// console.log(scene.children)
 
 /**
  * 相机设置
@@ -51,7 +82,8 @@ var k = width / height; //窗口宽高比
 var s = 300; //三维场景显示范围控制系数，系数越大，显示的范围越大
 //创建相机对象
 var camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 1000);
-camera.position.set(200, 300, 200); //设置相机位置
+// var camera = new THREE.PerspectiveCamera(-s * k, s * k, s, -s, 1, 1000);
+camera.position.set(400, 500, 400); //设置相机位置
 // camera.position.set(300, 300, 200); //设置相机位置
 camera.lookAt(scene.position); //设置相机方向(指向的场景对象)
 
@@ -71,15 +103,3 @@ function render() {
 render();
 var controls = new THREE.OrbitControls(camera, renderer.domElement); //创建控件对象
 controls.addEventListener("change", render); //监听鼠标、键盘事件
-
-// requestAnimationFrame
-// 注意开发中不要同时使用 requestAnimationFrame() 或 controls.addEventListener('change', render) 调用同一个函数，这样会冲突
-// function render() {
-//     renderer.render(scene,camera);//执行渲染操作
-//     // mesh.rotateY(0.01);//每次绕y轴旋转0.01弧度
-//     requestAnimationFrame(render);//请求再次执行渲染函数render
-// }
-// render();
-// var controls = new THREE.OrbitControls(camera);//创建控件对象
-// // 已经通过requestAnimationFrame(render);周期性执行render函数，没必要再通过监听鼠标事件执行render函数
-// // controls.addEventListener('change', render)

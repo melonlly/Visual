@@ -13,13 +13,19 @@ var geometry3 = new THREE.BoxGeometry(300, 100, 100);
 //材质对象Material
 var material = new THREE.MeshLambertMaterial({
     color: 0x0000ff,
+    opacity: 0.3, // 透明度
+    transparent:true, // 透明效果
 });
 // var color = new THREE.Color("rgb(0, 255, 0, 0.2)");
 var material2 = new THREE.MeshLambertMaterial({
     color: 0x00ff00,
+    opacity: 0.3, // 透明度
+    transparent:true, // 透明效果
 });
 var material3 = new THREE.MeshLambertMaterial({
     color: 0xff0000,
+    opacity: 0.3, // 透明度
+    transparent:true, // 透明效果
 });
 var mesh = new THREE.Mesh(geometry, material); //网格模型对象Mesh
 var mesh2 = new THREE.Mesh(geometry2, material2);

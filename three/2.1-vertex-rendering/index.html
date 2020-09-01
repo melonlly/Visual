@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>2.1-顶点位置数据解析渲染</title>
+
+        <style>
+            body {
+                margin: 0;
+                overflow: hidden;
+                /* 隐藏body窗口区域滚动条 */
+            }
+        </style>
+    </head>
+    <body>
+        <script src="../libs/three.js"></script>
+        <script src="../libs/OrbitControls.js"></script>
+
+        <script src="./index.js"></script>
+
+        <!--
+            几何体本质
+                三角形
+        -->
+
+        <script>
+            /*
+                类型化数组  https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Typed_arrays
+                    一种类似数组的对象，并提供了一种用于访问原始二进制数据的机制
+            */
+            var buffer = new ArrayBuffer(16); // 16字节固定长度的缓冲
+            // 在实际开始操作这个缓冲之前，需要创建一个视图
+            var int32View = new Int32Array(buffer); // 视图将把缓冲内的数据格式化为一个32位的有符号整数数组
+            // console.log(int32View.length)
+            for (var i = 0; i < int32View.length; i++) {
+                int32View[i] = i * 2;
+                // int32View[i] = 'a';
+            }
+            // console.log(int32View)
+
+            var unit32View = new Uint32Array(buffer)
+            // console.log(unit32View.length)
+            for (var i = 0; i < unit32View.length; i++) {
+                unit32View[i] = 123456789;
+            }
+            // console.log(unit32View)
+        </script>
+    </body>
+</html>
