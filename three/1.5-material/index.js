@@ -18,6 +18,9 @@ var dodecahed = new THREE.DodecahedronGeometry(50);
 // 正二十面体
 var icosahedron = new THREE.IcosahedronGeometry(50);
 
+
+
+
 //材质对象Material
 var material = new THREE.MeshLambertMaterial({
     color: 0x0000ff,
@@ -57,6 +60,10 @@ mesh3.position.set(100, 200, 300);
 scene.add(mesh3);
 mesh4.position.set(100, -100, 100);
 scene.add(mesh4);
+
+
+
+
 
 // 辅助坐标系 AxesHelper
 scene.add(new THREE.AxesHelper(400));

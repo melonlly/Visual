@@ -3,6 +3,12 @@
  */
 var scene = new THREE.Scene();
 
+
+
+
+
+
+
 /**
  * 创建网格模型
  */
@@ -46,6 +52,13 @@ var material=new THREE.LineBasicMaterial({
 });//材质对象
 var line=new THREE.Line(geometry,material);//线条模型对象
 scene.add(line);//线条对象添加到场景中
+
+
+
+
+
+
+
 
 // 辅助坐标系 AxesHelper
 scene.add(new THREE.AxesHelper(200));

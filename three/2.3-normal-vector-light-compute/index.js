@@ -3,6 +3,11 @@
  */
 var scene = new THREE.Scene();
 
+
+
+
+
+
 /**
  * 创建网格模型
  */
@@ -50,9 +55,15 @@ var material = new THREE.MeshLambertMaterial({
 var mesh = new THREE.Mesh(geometry, material); //网格模型对象Mesh
 scene.add(mesh); //网格模型添加到场景中
 
+
+
+
+
+
+
+
 // 辅助坐标系 AxesHelper
 scene.add(new THREE.AxesHelper(200));
-
 
 /**
  * 光源设置（没有光源的时候，默认都是黑色的）

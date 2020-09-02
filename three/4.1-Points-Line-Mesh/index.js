@@ -3,35 +3,36 @@
  */
 var scene = new THREE.Scene();
 
-
-
-
 /**
  * 创建网格模型
  */
-var geometry = new THREE.BoxGeometry(50, 50, 50); //创建一个立方体几何对象Geometry
-console.log(geometry);
-console.log("几何体顶点位置数据", geometry.vertices);
-console.log("三角行面数据", geometry.faces);
-
-//创建一个矩形平面几何体
-var geometry = new THREE.PlaneBufferGeometry(100, 100);
-console.log(geometry);
-console.log("几何体顶点位置数据", geometry.attributes.position);
-console.log("几何体索引数据", geometry.index);
+var geometry = new THREE.BoxGeometry(100, 100, 100); //创建一个立方体几何对象Geometry
 
 
 
 
 
-//材质对象Material
-var material = new THREE.MeshLambertMaterial({
-    // color: 0x0000ff,
-    vertexColors: THREE.VertexColors, //以顶点颜色为准
-    side: THREE.DoubleSide, //两面可见
-});
-var mesh = new THREE.Mesh(geometry, material); //网格模型对象Mesh
-scene.add(mesh); //网格模型添加到场景中
+// 点渲染模式
+// var material = new THREE.PointsMaterial({
+//     color: 0xff0000,
+//     size: 5.0, //点对象像素尺寸
+// }); //材质对象
+// var points = new THREE.Points(geometry, material); //点模型对象
+// scene.add(points);
+
+// 线条渲染模式
+var material = new THREE.LineBasicMaterial({
+    color: 0xff0000, //线条颜色
+}); //材质对象
+// 创建线模型对象   构造函数：Line、LineLoop、LineSegments
+var line = new THREE.LineLoop(geometry, material); //线条模型对象
+scene.add(line)
+
+
+
+
+
+
 
 // 辅助坐标系 AxesHelper
 scene.add(new THREE.AxesHelper(200));

@@ -3,6 +3,9 @@
  */
 var scene = new THREE.Scene();
 
+
+
+
 /**
  * 创建网格模型
  */
@@ -45,6 +48,11 @@ var material = new THREE.PointsMaterial({
 // material.wireframe = true; // 将几何图形渲染为线框
 var points = new THREE.Points(geometry, material); //网格模型对象Mesh
 scene.add(points); //网格模型添加到场景中
+
+
+
+
+
 
 // 辅助坐标系 AxesHelper
 scene.add(new THREE.AxesHelper(200));

@@ -6,47 +6,20 @@ var scene = new THREE.Scene();
 
 
 
-/**
- * 创建网格模型
- */
-var geometry = new THREE.BoxGeometry(50, 50, 50); //创建一个立方体几何对象Geometry
-console.log(geometry);
-console.log("几何体顶点位置数据", geometry.vertices);
-console.log("三角行面数据", geometry.faces);
-
-//创建一个矩形平面几何体
-var geometry = new THREE.PlaneBufferGeometry(100, 100);
-console.log(geometry);
-console.log("几何体顶点位置数据", geometry.attributes.position);
-console.log("几何体索引数据", geometry.index);
 
 
 
 
 
-//材质对象Material
-var material = new THREE.MeshLambertMaterial({
-    // color: 0x0000ff,
-    vertexColors: THREE.VertexColors, //以顶点颜色为准
-    side: THREE.DoubleSide, //两面可见
-});
-var mesh = new THREE.Mesh(geometry, material); //网格模型对象Mesh
-scene.add(mesh); //网格模型添加到场景中
+
+
+
+
+
+
 
 // 辅助坐标系 AxesHelper
 scene.add(new THREE.AxesHelper(200));
-
-/**
- * 光源设置（没有光源的时候，默认都是黑色的）
- */
-//点光源
-var point = new THREE.PointLight(0xffffff);
-// point.position.set(400, -200, 400); //点光源位置
-point.position.set(150, 100, 100); //点光源位置
-scene.add(point); //点光源添加到场景中
-// 环境光 （环境光颜色与网格模型的颜色进行RGB进行乘法运算）
-var ambient = new THREE.AmbientLight(0x444444);
-scene.add(ambient);
 
 /**
  * 相机设置

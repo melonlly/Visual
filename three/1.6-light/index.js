@@ -61,6 +61,10 @@ scene.add(mesh4);
 // 辅助坐标系 AxesHelper
 scene.add(new THREE.AxesHelper(400));
 
+
+
+
+
 /**
  * 光源设置（没有光源的时候，默认都是黑色的）
  */
@@ -72,6 +76,11 @@ scene.add(point); //点光源添加到场景中
 // 环境光 （环境光颜色与网格模型的颜色进行RGB进行乘法运算）
 // var ambient = new THREE.AmbientLight(0x444444);
 // scene.add(ambient);
+
+
+
+
+
 
 /**
  * 相机设置

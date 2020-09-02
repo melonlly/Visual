@@ -3,6 +3,11 @@
  */
 var scene = new THREE.Scene();
 
+
+
+
+
+
 /**
  * 创建网格模型
  */
@@ -52,6 +57,14 @@ var material = new THREE.PointsMaterial({
 // 点渲染模式  点模型对象Points
 var points = new THREE.Points(geometry, material); //点模型对象
 scene.add(points); //点对象添加到场景
+
+
+
+
+
+
+
+
 
 // 辅助坐标系 AxesHelper
 scene.add(new THREE.AxesHelper(200));

@@ -3,6 +3,9 @@
  */
 var scene = new THREE.Scene();
 
+
+
+
 /**
  * 创建网格模型
  */
@@ -39,6 +42,11 @@ scene.add(mesh2)
 var mesh3 = new THREE.Mesh(cylinder, material3);
 mesh3.position.set(100, 200, 300)
 scene.add(mesh3)
+
+
+
+
+
 
 // 辅助坐标系 AxesHelper
 scene.add(new THREE.AxesHelper(400));

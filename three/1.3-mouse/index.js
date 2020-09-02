@@ -65,6 +65,14 @@ document.body.appendChild(renderer.domElement); //body元素中插入canvas对�
 //执行渲染操作   指定场景、相机作为参数
 // renderer.render(scene, camera);
 
+
+
+
+
+
+
+
+
 function render() {
     renderer.render(scene, camera); //执行渲染操作
 }

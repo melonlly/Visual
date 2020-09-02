@@ -16,17 +16,27 @@ geometry.rotateX(Math.PI / 4);
 // 居中：偏移的几何体居中
 geometry.center();
 
-//材质对象Material
-var material = new THREE.SpriteMaterial({
-    // color: 0x0000ff,
-    vertexColors: THREE.VertexColors, //以顶点颜色为准
-    // side: THREE.DoubleSide, //两面可见
-});
-var mesh = new THREE.Mesh(geometry, material); //网格模型对象Mesh
-scene.add(mesh); //网格模型添加到场景中
+
+
+
+
+// Sprite Material
+var spriteMap = new THREE.TextureLoader().load( '../../textures/sprite.png' );
+
+var spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
+
+var sprite = new THREE.Sprite( spriteMaterial );
+sprite.scale.set(50, 50, 50)
+
+scene.add( sprite );
+
+
+
+
+
 
 // 辅助坐标系 AxesHelper
-scene.add(new THREE.AxesHelper(200));
+scene.add(new THREE.AxesHelper(100));
 
 /**
  * 光源设置（没有光源的时候，默认都是黑色的）
@@ -46,7 +56,7 @@ scene.add(ambient);
 var width = window.innerWidth; //窗口宽度
 var height = window.innerHeight; //窗口高度
 var k = width / height; //窗口宽高比
-var s = 100; //三维场景显示范围控制系数，系数越大，显示的范围越大
+var s = 120; //三维场景显示范围控制系数，系数越大，显示的范围越大
 //创建相机对象
 var camera = new THREE.OrthographicCamera(-s * k, s * k, s, -s, 1, 1000);
 camera.position.set(200, 300, 200); //设置相机位置
