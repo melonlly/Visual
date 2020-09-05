@@ -17,33 +17,56 @@ scene.add(point); //点光源添加到场景中
 
 
 
-
+/**
+ * 精灵创建树林效果
+ */
+// 加载树纹理贴图
+var textureTree = new THREE.TextureLoader().load("../../textures/tree.png");
+// 创建一个组表示所有的树木
+var groupTree = new THREE.Group();
+// 批量创建表示一个树的精灵模型
+for (let i = 0; i < 100; i++) {
+  const spriteMaterial = new THREE.SpriteMaterial({
+    map: textureTree,//设置精灵纹理贴图
+  });
+  // 创建精灵模型对象
+  const sprite = new THREE.Sprite(spriteMaterial);
+  // scene.add(sprite);
+  // 控制精灵大小,
+  sprite.scale.set(100, 100, 1); //// 只需要设置x、y两个分量就可以
+  const k1 = Math.random() - 0.5;
+  const k2 = Math.random() - 0.5;
+  // 设置精灵模型位置，在xoz平面上随机分布
+  sprite.position.set(1000 * k1, 50, 1000 * k2)
+  groupTree.add(sprite);
+}
 
 /**
  * 精灵创建下雨效果
  */
 // 加载雨滴理贴图
-var textureTree = new THREE.TextureLoader().load("../../textures/rain.png");
+var textureRain = new THREE.TextureLoader().load("../../textures/rain.png");
 // 创建一个组表示所有的雨滴
-var group = new THREE.Group();
+var groupRain = new THREE.Group();
 // 批量创建表示雨滴的精灵模型
 for (let i = 0; i < 400; i++) {
-  var spriteMaterial = new THREE.SpriteMaterial({
-    map:textureTree,//设置精灵纹理贴图
+  const spriteMaterial = new THREE.SpriteMaterial({
+    map: textureRain,//设置精灵纹理贴图
   });
   // 创建精灵模型对象
-  var sprite = new THREE.Sprite(spriteMaterial);
+  const sprite = new THREE.Sprite(spriteMaterial);
   // scene.add(sprite);
   // 控制精灵大小,
   sprite.scale.set(8, 10, 1); //// 只需要设置x、y两个分量就可以
-  var k1 = Math.random() - 0.5;
-  var k2 = Math.random() - 0.5;
+  const k1 = Math.random() - 0.5;
+  const k2 = Math.random() - 0.5;
   // 设置精灵模型位置，在整个空间上上随机分布
-  sprite.position.set(1000 * k1, 300 * Math.random(), 1000 * k2)
-  group.add(sprite);
+  sprite.position.set(1000 * k1, 600 * Math.random(), 1000 * k2)
+  groupRain.add(sprite);
 }
 
-scene.add(group); //雨滴群组插入场景中
+scene.add(groupTree); //树木群组插入场景中
+scene.add(groupRain); //雨滴群组插入场景中
 
 
 /**
@@ -169,7 +192,7 @@ function render() {
 
     // 每次渲染遍历雨滴群组，刷新频率30~60FPS，两帧时间间隔16.67ms~33.33ms
     // 每次渲染都会更新雨滴的位置，进而产生动画效果
-    group.children.forEach(sprite => {
+    groupRain.children.forEach(sprite => {
       // sprite.position.y -= 1;
       sprite.position.y -= 5 * Math.random();
       if (sprite.position.y < 0) {
