@@ -18,19 +18,43 @@ scene.add(point); //点光源添加到场景中
 
 
 
+/*
+  几何体信息
+*/
+console.log(`******** 几何体信息 **********************************************************************************`)
+var geometry = new THREE.BoxGeometry(100, 100, 100);
+// 控制台查看立方体数据
+console.log(geometry);
+// 控制台查看geometry.toJSON()结果
+console.log(geometry.toJSON());
+// JSON对象转化为字符串
+console.log(JSON.stringify(geometry.toJSON()));
+// JSON.stringify()方法内部会自动调用参数的toJSON()方法
+console.log(JSON.stringify(geometry));
+console.log(`******** 几何体信息 **********************************************************************************`)
 
-var texture = new THREE.TextureLoader().load("../../textures/sprite.png");
-// 创建精灵材质对象SpriteMaterial
-var spriteMaterial = new THREE.SpriteMaterial({
-  color:0xffffff,//设置精灵矩形区域颜色
-  rotation:Math.PI/4,//旋转精灵对象45度，弧度值
-  map: texture,//设置精灵纹理贴图
-});
-// 创建精灵模型对象，不需要几何体geometry参数
-var sprite = new THREE.Sprite(spriteMaterial);
-scene.add(sprite);
-// 控制精灵大小，比如可视化中精灵大小表征数据大小
-sprite.scale.set(100, 100, 1); //// 只需要设置x、y两个分量就可以
+/*
+  材质信息
+*/
+console.log(`******** 材质信息 **********************************************************************************`)
+var material = new THREE.MeshLambertMaterial({
+  color: 0x0000ff,
+}); //材质对象Material
+console.log(material);
+console.log(material.toJSON());
+console.log(JSON.stringify(material));
+console.log(`******** 材质信息 **********************************************************************************`)
+
+/*
+  场景信息
+*/
+console.log(`******** 场景信息 **********************************************************************************`)
+var mesh = new THREE.Mesh(geometry, material); //网格模型对象Mesh
+scene.add(mesh); //网格模型添加到场景中
+console.log(scene);
+console.log(scene.toJSON());
+console.log(`******** 场景信息 **********************************************************************************`)
+
 
 
 
