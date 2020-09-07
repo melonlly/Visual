@@ -24,7 +24,8 @@ scene.add(point); //点光源添加到场景中
  * stl数据加载
  */
 var loader = new THREE.STLLoader();
-loader.load('../../models/sprite.png',function (geometry) {
+// loader.load('../../models/stl/ascii/slotted_disk.stl', function (geometry) {
+loader.load('../../models/stl/ascii/pr2_head_pan.stl', function (geometry) {
   // 控制台查看加载放回的threejs对象结构
   console.log(geometry);
   // 查看顶点数，一个立方体6个矩形面，每个矩形面至少2个三角面，每个三角面3个顶点，
@@ -36,11 +37,18 @@ loader.load('../../models/sprite.png',function (geometry) {
   // geometry.center();
   // 平移立方体
   // geometry.translate(-50,-50,-50);
-  var material = new THREE.MeshLambertMaterial({
-    color: 0x0000ff,
-  }); //材质对象Material
-  var mesh = new THREE.Mesh(geometry, material); //网格模型对象Mesh
-  scene.add(mesh); //网格模型添加到场景中
+  // var material = new THREE.MeshLambertMaterial({
+  //   color: 0x0000ff,
+  // }); //材质对象Material
+  // var mesh = new THREE.Mesh(geometry, material); //网格模型对象Mesh
+  // scene.add(mesh); //网格模型添加到场景中
+
+  var material = new THREE.PointsMaterial({
+    color: 0x000000,
+    size: 0.5//点对象像素尺寸
+  }); //材质对象
+  var points = new THREE.Points(geometry, material); //点模型对象
+  scene.add(points); //点对象添加到场景中
 })
 
 
