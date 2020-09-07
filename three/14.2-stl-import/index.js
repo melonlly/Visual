@@ -20,7 +20,28 @@ scene.add(point); //点光源添加到场景中
 
 
 
-
+/**
+ * stl数据加载
+ */
+var loader = new THREE.STLLoader();
+loader.load('../../models/sprite.png',function (geometry) {
+  // 控制台查看加载放回的threejs对象结构
+  console.log(geometry);
+  // 查看顶点数，一个立方体6个矩形面，每个矩形面至少2个三角面，每个三角面3个顶点，
+  // 如果没有索引index复用顶点，就是说一个立方体至少36个顶点
+  // console.log(geometry.attributes.position.count);
+  // 缩放几何体
+  // geometry.scale(0.5,0.5,0.5);
+  // 几何体居中
+  // geometry.center();
+  // 平移立方体
+  // geometry.translate(-50,-50,-50);
+  var material = new THREE.MeshLambertMaterial({
+    color: 0x0000ff,
+  }); //材质对象Material
+  var mesh = new THREE.Mesh(geometry, material); //网格模型对象Mesh
+  scene.add(mesh); //网格模型添加到场景中
+})
 
 
 
