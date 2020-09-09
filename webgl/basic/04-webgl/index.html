@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>webgl</title>
+        <title>04-GPU与渲染管线：如何用WebGL绘制最简单的几何图形？</title>
         <style>
             body {
                 padding: 0;
@@ -96,9 +96,9 @@
 
             // 绘制模式（绘制图元的方式， 起始点， 绘制点数）
             // gl.drawArrays(gl.TRIANGLES, 0, points.length / 2); // 绘制实心三角形
-            // gl.drawArrays(gl.LINE_LOOP, 0, points.length / 2); // 绘制线圈（空心）
+            gl.drawArrays(gl.LINE_LOOP, 0, points.length / 2); // 绘制线圈（空心）
             // gl.drawArrays(gl.TRIANGLE_STRIP, 0, points.length / 2); // 绘制三角带（实心）
-            gl.drawArrays(gl.LINE_STRIP, 0, points.length / 2); // 绘制一系列线条
+            // gl.drawArrays(gl.LINE_STRIP, 0, points.length / 2); // 绘制线条
 
         </script>
     </body>
