@@ -93,7 +93,12 @@
                 执行着色器程序完成绘制
             */
             gl.clear(gl.COLOR_BUFFER_BIT); // 画布清除
-            gl.drawArrays(gl.TRIANGLES, 0, points.length / 2); // 绘制模式
+
+            // 绘制模式（绘制图元的方式， 起始点， 绘制点数）
+            // gl.drawArrays(gl.TRIANGLES, 0, points.length / 2); // 绘制实心三角形
+            // gl.drawArrays(gl.LINE_LOOP, 0, points.length / 2); // 绘制线圈（空心）
+            // gl.drawArrays(gl.TRIANGLE_STRIP, 0, points.length / 2); // 绘制三角带（实心）
+            gl.drawArrays(gl.LINE_STRIP, 0, points.length / 2); // 绘制一系列线条
 
         </script>
     </body>

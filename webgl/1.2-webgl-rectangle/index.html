@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>1.1-使用WebGL绘制一个点</title>
+        <title>1.2-WebGL绘制一个矩形</title>
     </head>
     <body>
         <!--canvas标签创建一个宽高均为500像素，背景为蓝色的矩形画布-->
@@ -16,42 +16,25 @@
 
         <!-- 顶点着色器源码 -->
         <script id="vertexShader" type="x-shader/x-vertex">
+            attribute vec4 apos;
+
             void main() {
-              //给内置变量gl_PointSize赋值像素大小
-              gl_PointSize = 10.0;
-              //顶点位置，位于坐标原点
-              gl_Position = vec4(0.0,0.0,0.0,1.0);
+              // 顶点位置，位于坐标原点
+              gl_Position = apos;
             }
         </script>
         <!-- 片元着色器源码 -->
         <script id="fragmentShader" type="x-shader/x-fragment">
+            precision mediump float;
+
             void main() {
-              gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+              gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);
             }
         </script>
 
         <script>
             var canvas = document.getElementById("webgl");
             var gl = canvas.getContext("webgl");
-
-            /*
-                gl_PointSize、gl_Position、gl_FragColor都是内置变量，也就是说不需要声明，
-                这一点与多数编程语言不同，这主要是由GPU的特殊性决定，感兴趣的话 可以研究显卡的硬件结构，渲染管线等概念
-            */
-            // //顶点着色器源码
-            // var vertexShaderSource =
-            //     "void main() {" +
-            //     //给内置变量gl_PointSize赋值像素大小
-            //     "   gl_PointSize=20.0;" +
-            //     //顶点位置，位于坐标原点
-            //     "   gl_Position =vec4(0.5,0.5,0.0,1.0);" +
-            //     "}";
-            // //片元着色器源码
-            // var fragShaderSource =
-            //     "void main() {" +
-            //     //定义片元颜色
-            //     "   gl_FragColor = vec4(1.0,0.0,0.0,0.5);" +
-            //     "}";
 
             //顶点着色器源码
             var vertexShaderSource = document.getElementById('vertexShader').innerText;
@@ -60,8 +43,44 @@
 
             //初始化着色器
             var program = initShader(gl, vertexShaderSource, fragShaderSource);
-            //开始绘制，显示器显示结果
-            gl.drawArrays(gl.POINTS, 0, 1);
+
+
+
+
+            // 顶点数据
+            const points = new Float32Array([
+                0.5, 0.5,
+                -0.5, 0.5,
+                -0.5, -0.5,
+                0.5, -0.5
+            ]);
+            // 顶点数据写入 webgl 缓冲区
+            const bufferId = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, bufferId);
+            gl.bufferData(gl.ARRAY_BUFFER, points, gl.STATIC_DRAW);
+            
+            // 将缓冲区数据读取到 GPU
+            const vPosition = gl.getAttribLocation(program, 'apos'); // 获取顶点着色器中的 position 变量的地址
+            gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0); // 给变量设置长度和类型
+            gl.enableVertexAttribArray(vPosition); // 激活这个变量
+
+            // 执行着色器程序完成绘制
+            gl.clear(gl.COLOR_BUFFER_BIT); // 清除当前画布
+            /*
+                第一个参数      绘制模式
+                第二个参数      从第几个点开始
+                第三个参数      总共绘制几个点
+            */
+            gl.drawArrays(gl.LINE_LOOP, 0, 4);
+
+
+
+
+
+
+
+
+
 
             //声明初始化着色器函数
             function initShader(gl, vertexShaderSource, fragmentShaderSource) {

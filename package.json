@@ -4,10 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "http-server -c-1 -p9999",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
+  "devDependencies": {
+    "http-server": "^0.12.3"
+  },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
