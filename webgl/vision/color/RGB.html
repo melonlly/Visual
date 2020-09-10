@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>RGB 和 RGBA 颜色</title>
+    </head>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+
+        <script type="module">
+            /*
+                RGB 颜色表示法的局限性，计算性差
+                    对比两个 RGB 颜色时，只能通过对比他们在 RGB 立方体中的相对距离，来判断他们的颜色差异
+                
+                实际需求：
+                    当要选择一组颜色给图表使用时，我们并不知道要以什么样的规则来配置颜色，才能让不同数据对应的图形之间的对比尽可能鲜明
+                
+            */
+            import { Vec3 } from "../../common/lib/math/vec3.js";
+
+            const canvas = document.querySelector("canvas");
+            const ctx = canvas.getContext("2d");
+
+            function randomRGB() {
+                return new Vec3(
+                    0.5 * Math.random(),
+                    0.5 * Math.random(),
+                    0.5 * Math.random()
+                );
+            }
+
+            /*
+                将坐标系转化为 笛卡尔坐标系 
+                    原点在左下角
+            */
+            ctx.translate(canvas.width / 2, canvas.height / 2); // 移动原点，元素显示居中
+            ctx.scale(1, -1); // 翻转 y 轴 （默认原点在浏览器左上角）
+
+            for (let i = 0; i < 3; i++) {
+                const colorVector = randomRGB();
+                for (let j = 0; j < 5; j++) {
+                    const c = colorVector.clone().scale(0.5 + 0.25 * j);
+                    ctx.fillStyle = `
+                        rgb( ${ Math.floor(c[0] * 256) }, ${ Math.floor(c[1] * 256) }, ${ Math.floor(c[2] * 256) } )
+                    `;
+                    ctx.beginPath();
+                    ctx.arc((j - 2) * 60, (i - 1) * 60, 20, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            /*
+
+                缺点：
+                    1. 由于 RGB 颜色是随机产生的，色差可能很大，也可能很小
+                    2. 无法控制随机生成的颜色本身的亮度
+                
+                需要动态构建视觉颜色效果的时候，一般使用 HSL 或 HSV 颜色表示
+
+            */
+        </script>
+    </body>
+</html>

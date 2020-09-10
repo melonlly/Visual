@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>HSL 和 HSV 颜色</title>
+    </head>
+    <body>
+        <canvas id="canvas" width="800" height="600"></canvas>
+
+        <script type="module">
+            /*
+                HSL 和 HSV 的颜色表示方法
+                    CSS 和 Canvas2D 都可以直接支持 HSL 颜色，只有 WebGL 需要做转换
+            */
+            import { Vec3 } from "../../common/lib/math/vec3.js";
+
+            const canvas = document.querySelector("canvas");
+            const ctx = canvas.getContext("2d");
+
+            // 主要随机色相 H
+            function randomHSLColor() {
+                return new Vec3(
+                    0.5 * Math.random(), // 初始色相随机取0~0.5之间的值
+                    0.7, // 初始饱和度0.7
+                    0.45 // 初始亮度0.45
+                );
+            }
+
+            /*
+                将坐标系转化为 笛卡尔坐标系
+                    原点在左下角
+            */
+            ctx.translate(canvas.width / 2, canvas.height / 4); // 移动原点，元素显示居中
+            ctx.scale(1, -1); // 翻转 y 轴 （默认原点在浏览器左上角）
+
+            const [h, s, l] = randomHSLColor();
+            for (let i = 0; i < 3; i++) {
+                const p = (i * 0.25 + h) % 1;
+                for (let j = 0; j < 5; j++) {
+                    const d = j - 2;
+                    ctx.fillStyle = `
+                        hsl(${Math.floor(p * 360)}, ${Math.floor((0.15 * d + s) * 100)}%, ${Math.floor((0.12 * d + l) * 100)}%)
+                    `;
+                    ctx.beginPath();
+                    // arc(x, y, radius, startAngle, endAngle, anticlockwise)
+                    ctx.arc((j - 2) * 60, (i - 1) * 60, 20, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            
+            /*
+                色相间隔 15
+                    相互之间颜色变化并不是均匀的
+            */
+            for (let i = 0; i < 20; i++) {
+                ctx.fillStyle = `
+                    hsl(${ Math.floor(i * 15) }, 50%, 50%)
+                `;
+                ctx.beginPath();
+                ctx.arc((i - 10) * 30, -120, 15, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            /*
+                色相 60 和 210 附近两两交错
+                    虽然这些圆的亮度都是 50% ，但是蓝色和紫色的圆看起来就是不如偏绿偏黄的圆亮
+            */
+            for (let i = 0; i < 20; i++) {
+                ctx.fillStyle = `
+                    hsl(${ Math.floor((i % 2 ? 60 : 210) + 3 * i) }, 50%, 50%)
+                `;
+                ctx.beginPath();
+                ctx.arc((i - 10) * 30, -180, 15, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            /*
+
+                HSL 和 HSV 的局限性，不能满足人类知觉的标准
+                    以上两种情况的随机颜色，都是由于人眼对不同频率的光的敏感度不同造成的
+
+                原则
+                    1. 人眼看到的色差 = 颜色向量间的欧氏距离
+                    2. 相同的亮度，能让人感觉亮度相同
+                
+                因此更符合人类感觉得颜色描述产生了：CIE Lab 和 CIE Lch 颜色
+            */
+        </script>
+    </body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>CIE Lab 和 CIE Lch 颜色</title>
+    </head>
+    <body>
+        <canvas id="canvas" width="600" height="600"></canvas>
+
+        <script src="../../common/d3.js"></script>
+
+        <script type="module">
+            /*
+                CIE Lab 和 CIE Lch 颜色表示方法
+                    L 表示亮度
+                    a 和 b 表示颜色对立度
+            */
+            import { Vec3 } from "../../common/lib/math/vec3.js";
+
+            const canvas = document.querySelector("canvas");
+            const ctx = canvas.getContext("2d");
+
+            /*
+                将坐标系转化为 笛卡尔坐标系
+                    原点在左下角
+            */
+            ctx.translate(canvas.width / 2, canvas.height / 4); // 移动原点，元素显示居中
+            ctx.scale(1, -1); // 翻转 y 轴 （默认原点在浏览器左上角）
+
+            // 相邻圆形之间的 lab 色值的欧氏空间距离相同
+            for (let i = 0; i < 20; i++) {
+                const c = d3.lab(30, i * 15 - 150, i * 15 - 150).rgb();
+                ctx.fillStyle = `rgb(${c.r}, ${c.g}, ${c.b})`;
+                ctx.beginPath();
+                ctx.arc((i - 10) * 20, 60, 10, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // 相邻圆形之间的亮度按 5 阶的方式递增
+            for (let i = 0; i < 20; i++) {
+                const c = d3.lab(i * 5, 80, 80).rgb();
+                ctx.fillStyle = `rgb(${c.r}, ${c.g}, ${c.b})`;
+                ctx.beginPath();
+                ctx.arc((i - 10) * 20, -60, 10, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            /*
+
+                
+
+            */
+        </script>
+    </body>
+</html>

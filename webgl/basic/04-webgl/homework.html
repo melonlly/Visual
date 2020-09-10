@@ -35,7 +35,7 @@
                     const ny = y + r * sin(angel);
                     positionArray.push(nx, ny);
                 }
-                console.log(positionArray)
+                console.log(positionArray);
                 return new Float32Array(positionArray);
             }
 
@@ -60,7 +60,7 @@
                         positionArray.push(rx, ry);
                     }
                 }
-                console.log(positionArray)
+                console.log(positionArray);
                 return new Float32Array(positionArray);
             }
         </script>
@@ -136,8 +136,8 @@
             // const points = createMultiAngleVertex(0, 0, 1, 0.5, 3) // 三角形
             // const points = createMultiAngleVertex(0, 0, 1, 0.5, 4) // 四角形
             // const points = createMultiAngleVertex(0, 0, 1, 0.5, 5) // 五角形
-            const points = createMultiAngleVertex(0, 0, 1, 0.9, 100) // 100角形
-            
+            const points = createMultiAngleVertex(0, 0, 1, 0.9, 100); // 100角形
+
             // 将定义好的数据写入 WebGL 的缓冲区
             const bufferId = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, bufferId);
@@ -160,8 +160,6 @@
             gl.drawArrays(gl.LINE_LOOP, 0, points.length / 2); // 绘制线圈（空心）
             // gl.drawArrays(gl.TRIANGLE_STRIP, 0, points.length / 2); // 绘制三角带（实心）
             // gl.drawArrays(gl.LINE_STRIP, 0, points.length / 2); // 绘制线条
-
         </script>
-
     </body>
 </html>
