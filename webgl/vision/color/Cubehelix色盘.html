@@ -3,13 +3,13 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>CIE Lab 和 CIE Lch 颜色</title>
+        <title>Cubehelix色盘</title>
     </head>
     <body>
         <canvas id="canvas" width="256" height="256"></canvas>
 
         <script type="module">
-            import { cubehelix } from "../../common/lib/cubehelix/cubehelix.js";
+            import cubehelix from "../../common/lib/cubehelix/index.js";
 
             const canvas = document.querySelector("canvas");
             const ctx = canvas.getContext("2d");

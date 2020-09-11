@@ -31,6 +31,9 @@ function cubehelix(overrides = {}) {
 
 }
 
-exports.cubehelix = cubehelix;
-exports.defaultHelixConfig = defaultHelixConfig;
+// exports.cubehelix = cubehelix;
+// exports.defaultHelixConfig = defaultHelixConfig;
 
+export {
+    cubehelix, defaultHelixConfig
+}

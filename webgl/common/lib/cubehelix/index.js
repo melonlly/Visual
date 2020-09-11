@@ -3,4 +3,6 @@
 
 import {cubehelix} from './cubehelix.js';
 
-exports.cubehelix = cubehelix;
+// exports.cubehelix = cubehelix;
+
+export default cubehelix

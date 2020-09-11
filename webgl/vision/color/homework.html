@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 | 图形系统如何表示颜色？-课后练习</title>
+</head>
+<body>
+    
+    <canvas id="canvas" width="256" height="256"></canvas>
+
+    <script type="module">
+        import earcut from '../../common/earcut.js'
+
+        /*
+            结合 hsv 和 rgb 互转的 glsl 代码
+            用 WebGL 画两个圆，让它们的角度对应具体的 HUE 色相值，
+            让其中一个圆的半径对应饱和度 S，
+            另一个圆的半径对应明度 V ，
+            将 HSV 色盘绘制出来
+        */
+
+        const container = document.querySelector("canvas");
+        const gl = container.getContext("webgl");
+
+        // 生成圆（半径，顶点数，圆心x，圆心y）
+        const generateCircle = (r, vs, x, y) => {
+            const points = []
+            for (let i = 0; i < vs; i++) {
+                const angle = i * 2 * Math.PI / vs
+                points.push([
+                    r * Math.cos(angle) + x,
+                    r * Math.sin(angle) + y,
+                ])
+            }
+            return points // 顶点坐标集合
+        }
+        
+        // 顶点着色器
+        const vertex = `
+            #define PI 3.1415926535897932384626433832795
+            attribute vec2 position;
+            varying vec4 vColor;
+
+            vec3 rgb2hsv(vec3 c){
+                vec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);
+                vec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));
+                vec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));
+                float d = q.x - min(q.w, q.y);
+                float e = 1.0e-10;
+                return vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);
+            }
+
+            // 都是(0, 1)
+            vec3 hsv2rgb(vec3 c){
+                vec3 rgb = clamp(abs(mod(c.x*6.0+vec3(0.0,4.0,2.0), 6.0)-3.0)-1.0, 0.0, 1.0);
+                rgb = rgb * rgb * (3.0 - 2.0 * rgb);
+                return c.z * mix(vec3(1.0), rgb, c.y);
+            }
+
+            void main(){
+                // 两个圆的圆心分别在 (-0.5, 0), (0.5, 0), 将其转到(0, 0)方便计算
+                float x = position.x > 0.0 ? position.x - 0.5 : position.x + 0.5;
+                float y = position.y;
+
+                float hue = atan(position.y, x);
+                if (0.0 > hue) {
+                    hue = PI * 2.0 + hue;
+                }
+
+                hue /= 2.0 * PI;
+
+                float len = sqrt(x * x + y * y); // 到圆心距离
+                // 判断是哪一个圆, 使用不同的颜色
+                vec3 hsv = position.x > 0.0 ? vec3(hue, len, 1.0) : vec3(hue, 1.0, len);
+                vec3 rgb = hsv2rgb(hsv);
+                vColor = vec4(rgb, 1.0);
+                gl_Position = vec4(position, 1.0, 1.0);
+            }
+        `
+
+        // 片元着色器
+        const fragment = `
+            precision mediump float;
+            varying vec4 vColor;
+            void main(){
+                gl_FragColor = vColor;
+            }
+        `
+
+        /*
+            创建 webgl 程序
+        */
+        const vertexShader = gl.createShader(gl.VERTEX_SHADER)
+        const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER)
+        gl.shaderSource(vertexShader, vertex)
+        gl.shaderSource(fragmentShader, fragment)
+        gl.compileShader(vertexShader)
+        if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
+            console.log(`vertexShader 编译失败`)
+            gl.deleteShader(vertexShader)
+        }
+        gl.compileShader(fragmentShader)
+        if (!gl.getShaderParameter(fragmentShader, gl.COMPILE_STATUS)) {
+            console.log(`fragmentShader 编译失败`)
+            gl.deleteShader(fragmentShader)
+        }
+        /*
+            创建 WebGLProgram 对象
+            将 shader 关联到 webgl 程序
+        */
+        const program = gl.createProgram()
+        gl.attachShader(program, vertexShader)
+        gl.attachShader(program, fragmentShader)
+        gl.linkProgram(program)
+        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+            console.log(`webgl 程序初始化失败！`)
+        }
+        /*
+            启用程序
+        */
+        gl.useProgram(program)
+
+        // 半径对应饱和度 S
+        const circleS = generateCircle(0.4, 100, -0.5, 0)
+        // 半径对应饱明度 V
+        const circleV = generateCircle(0.4, 100, 0.5, 0)
+
+        function draw(program, circle) {
+            const points = circle.flat() // 按照一个可指定的深度递归遍历数组，并将所有元素与遍历到的子数组中的元素合并为一个新数组返回
+            const cell = earcut(points) // earcut -> 将任何多边形三角形化
+            console.log(cell)
+
+            const position = new Float32Array(points)
+            const cells = new Uint16Array(cell)
+            
+            const pointBuffer = gl.createBuffer()
+            gl.bindBuffer(gl.ARRAY_BUFFER, pointBuffer)
+            gl.bufferData(gl.ARRAY_BUFFER, position, gl.STATIC_DRAW)
+            
+            const vPosition = gl.getAttribLocation(program, 'position')
+            gl.vertexAttribPointer(vPosition, 2, gl.FLOAT, false, 0, 0)
+            gl.enableVertexAttribArray(vPosition)
+            
+            const cellsBuffer = gl.createBuffer()
+            gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, cellsBuffer)
+            gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, cells, gl.STATIC_DRAW)
+            
+            gl.drawElements(gl.TRIANGLES, cell.length, gl.UNSIGNED_SHORT, 0)
+        }
+
+        draw(program, circleS)
+        draw(program, circleV)
+
+    </script>
+
+</body>
+</html>

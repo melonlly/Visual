@@ -60,7 +60,11 @@ function display(m) {
     return rv.join('\n');
 }
 
-exports.add = add;
-exports.multiply = multiply;
-exports.scalarMul = scalarMul;
-exports.display = display;
+// exports.add = add;
+// exports.multiply = multiply;
+// exports.scalarMul = scalarMul;
+// exports.display = display;
+
+export {
+    add, multiply, scalarMul, display
+}
