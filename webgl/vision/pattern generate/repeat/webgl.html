@@ -9,15 +9,15 @@
     
     <canvas id="canvas" width="400" height="400"></canvas>
 
-    <script src="https://unpkg.com/gl-renderer/dist/gl-renderer.js"></script>
+    <script src="../../../common/gl-renderer.js"></script>
     <script>
         /*
             利用 GPU 并行计算的特点，使用着色器来绘制重复图案
         */
         const vertex = `
             attribute vec2 a_vertexPosition;
-            attribute vec2 uv;
-            varying vec2 vUv;
+            attribute vec2 uv; // 纹理坐标
+            varying vec2 vUv; // 顶点着色器 -> 片元着色器
 
             void main() {
                 gl_PointSize = 1.0;
@@ -27,17 +27,23 @@
         `
         const fragment = `
             #ifdef GL_ES
-                precision mediump float;
+            precision mediump float;
             #endif
-            varying vec2 vUv;
-            uniform float rows;
+
+            varying vec2 vUv; // 顶点着色器 -> 片元着色器
+            uniform float rows; // js -> 片元着色器
 
             void main() {
-                vec2 st = fract(vUv * rows); // 返回小数部分
+                vec2 st = fract(vUv * rows); // fract 返回小数部分
+
+                // WebGL 中的片元着色器线性插值，所以现在它们默认是线性变化的
+                // 为了实现阶梯变化，需要使用 step 函数
                 float d1 = step(st.x, 0.9); // st.x > 0.9 ? 0.0 : 1.0
                 float d2 = step(0.1, st.y); // 0.1 > st.y ? 0.0 : 1.0
+
+                // gl_FragColor 片元颜色值
                 gl_FragColor.rgb = mix(vec3(0.8), vec3(1.0), d1 * d2);
-                gl_FragColor.a = 1.0;
+                gl_FragColor.a = 1.0; // 设置透明度
             }
         `
 
@@ -50,11 +56,33 @@
         renderer.useProgram(program);
 
         // 第三步：设置 uniform 变量
-        renderer.uniforms.rows = 64;
+        renderer.uniforms.rows = 1;
+        setTimeout(() => {
+            renderer.uniforms.rows = 16;
+        }, 100)
         
-        // 
+        // 第四步：将顶点数据送入缓冲区
+        renderer.setMeshData([{
+            positions: [
+                [-1, -1],
+                [-1, 1],
+                [1, 1],
+                [1, -1],
+            ],
+            attributes: {
+                // 纹理坐标
+                uv: [
+                    [0, 0],
+                    [0, 1],
+                    [1, 1],
+                    [1, 0],
+                ],
+            },
+            // 顶点索引
+            cells: [[0, 1, 2], [2, 0, 3]],
+        }]);
 
-
+        renderer.render();
     </script>
 
 </body>
