@@ -3,17 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>利用 webgl 绘制重复图案</title>
+    <title>利用 webgl 绘制随机图案</title>
 </head>
 <body>
     
-    <canvas id="canvas" width="400" height="400"></canvas>
+    <canvas id="canvas" width="512" height="512"></canvas>
 
     <script src="../../../common/gl-renderer.js"></script>
     <script>
-        /*
-            利用 GPU 并行计算的特点，使用着色器来绘制重复图案
-        */
         const vertex = `
             attribute vec2 a_vertexPosition;
             attribute vec2 uv; // 纹理坐标
@@ -27,34 +24,20 @@
         `
         const fragment = `
             #ifdef GL_ES
-            precision mediump float;
+            precision highp float;
             #endif
 
-            varying vec2 vUv; // 顶点着色器 -> 片元着色器
-            uniform float rows; // js -> 片元着色器
+            varying vec2 vUv;
+
+            // 伪随机函数
+            // 取正弦函数偏后部的小数部分的值来模拟随机
+            float random (vec2 st) {
+                return fract(sin(dot(st.xy, vec2(12.9898, 78.233))) * 43758.5453123);
+            }
 
             void main() {
-                vec2 st = fract(vUv * rows); // fract 返回小数部分
-
-                // WebGL 中的片元着色器线性插值，所以现在它们默认是线性变化的
-                // 为了实现阶梯变化，需要使用 step 函数
-                float d1 = step(st.x, 0.9); // st.x > 0.9 ? 0.0 : 1.0
-                float d2 = step(0.1, st.y); // 0.1 > st.y ? 0.0 : 1.0
-
-                // gl_FragColor 片元颜色值
-                // T mix(T x, T y, float a)  取 x,y 的线性混合，x*(1-a)+y*a
-                // mix(vec3(0.8), vec3(1.0), d1 * d2) ==>> vec3(0.8) || vec3(1.0)
-                // vec3(0.0) -> #000000
-                // vec3(0.0666) -> #111111
-                // vec3(0.1) -> #191919
-                // vec3(0.1332) -> #222222
-                // vec3(0.2) -> #333333
-                // vec3(0.4) -> #666666
-                // vec3(0.6) -> #999999
-                // vec3(0.8) -> #CCCCCC
-                // vec3(1.0) -> #FFFFFF
-                gl_FragColor.rgb = mix(vec3(0.1332), vec3(1.0), d1 * d2);
-                gl_FragColor.a = 1.0; // 设置透明度
+                gl_FragColor.rgb = vec3(random(vUv));
+                gl_FragColor.a = 1.0;
             }
         `
 
@@ -67,7 +50,7 @@
         renderer.useProgram(program);
 
         // 第三步：设置 uniform 变量
-        renderer.uniforms.rows = 4;
+        
         
         // 第四步：将顶点数据送入缓冲区
         renderer.setMeshData([{
