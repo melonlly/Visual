@@ -6,76 +6,40 @@
     <title>Uniforms varying</title>
 </head>
 <body>
-    
-    <canvas id="canvas" width="200" height="200"></canvas>
+    <script src="../../common/GlslCanvas.js"></script>
+    <script>
+        /*
 
-    <script src="../../webgl/common/gl-renderer.js"></script>
+            内置了几个 uniforms
+                u_time              float           经过的时间
+                u_resolution        vec2            视口的尺寸
+                u_mouse             vec2            鼠标的位置
+                u_tex               sampler2D       包含由 数据纹理属性 加载的纹理
+
+        */
+    </script>
+    
+    <canvas class="glslCanvas" data-fragment-url="uniform.shader.frag" width="200" height="200"></canvas>
     <script>
 
         /*
             我们能从 CPU 给每个线程输入数据。因为显卡的架构，所有线程的输入值必须 统一（uniform），而且必须设为 只读
             每条线程接收相同的数据，并且是不可改变的数据
         */
+        
+        
+    </script>
+
+    <!-- <canvas class="glslCanvas" data-fragment-url="gl_FragCoord.shader.frag" width="200" height="200"></canvas> -->
+    <script>
 
         /*
-            gl_FragCoord存储了活动线程正在处理的像素或屏幕碎片的坐标
+            gl_FragCoord 存储了活动线程正在处理的像素或屏幕碎片的坐标
             有了它我们就知道了屏幕上的哪一个线程正在运转
             因为每个像素的坐标都不同，所以我们把它叫做 varying（变化值）
         */
 
-        const vertex = `
-            attribute vec2 a_vertexPosition;
 
-            void main() {
-                gl_PointSize = 1.0;
-                gl_Position = vec4(a_vertexPosition, 1, 1);
-            }
-        `
-        const fragment = `
-            #ifdef GL_ES
-            precision mediump float; // 设定所有的浮点值的精度
-            #endif
-
-            uniform vec2 u_resolution; // 画布尺寸（宽，高）
-            uniform vec2 u_mouse;      // 鼠标位置（在屏幕上哪个像素）
-            uniform float u_time;      // 时间（加载后的秒数）
-
-            void main() {
-                // 最终的像素颜色取决于预设的全局变量 gl_FragColor
-                // gl_FragColor = vec4(abs(sin(u_time)),0.0,0.0,1.0);
-
-                vec2 st = gl_FragCoord.xy / u_resolution;
-	            gl_FragColor = vec4(st.x, st.y, 0.0, 1.0);
-            }
-        `
-
-        // 第一步: 创建 Renderer 对象
-        const canvas = document.querySelector('canvas');
-        const renderer = new GlRenderer(canvas);
-
-        // 第二步: 创建并启用 WebGL 程序
-        const program = renderer.compileSync(fragment, vertex);
-        renderer.useProgram(program);
-
-        // 第三步：设置 uniform 变量
-
-        
-        // 第四步：将顶点数据送入缓冲区
-        renderer.setMeshData([{
-            positions: [
-                [-1, -1],
-                [-1, 1],
-                [1, 1],
-                [1, -1],
-            ],
-            attributes: {
-                u_time: 10
-            },
-            // 顶点索引
-            cells: [[0, 1, 2], [2, 0, 3]],
-        }]);
-
-        renderer.render();
     </script>
 
 </body>
